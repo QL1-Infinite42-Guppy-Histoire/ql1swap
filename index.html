@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>QL1Swap — Planned | Guppy's Guide</title>
+<meta name="description" content="QL1Swap is a planned swap site for QL1, part of Guppy's Guide — a community-built hitchhiker's toolbox for 42 Chain & QL1. Currently at the planning stage; this page is the placeholder where decided details will be posted." />
+<meta property="og:title" content="QL1Swap — Planned | Guppy's Guide" />
+<meta property="og:description" content="A swap site for QL1, planned as part of Guppy's Guide. Developed by the community; not an official QL1 service." />
+<script>
+  try {
+    if (localStorage.getItem("guppy-theme") === "dark") document.documentElement.dataset.theme = "dark";
+    if (localStorage.getItem("ql1swap-lang") === "ja") document.documentElement.dataset.lang = "ja";
+  } catch (e) {}
+</script>
+<style>
+  :root {
+    --bg: #f7f8fa; --card: #ffffff; --text: #14181f; --muted: #5c6572; --line: #e3e6ec;
+    --input-bg: #ffffff; --chip: #eef1f5; --accent: #2563eb; --shadow: 0 1px 3px rgba(16,24,40,.06);
+  }
+  :root[data-theme="dark"] {
+    --bg: #000000; --card: #121316; --text: #f2f3f5; --muted: #9aa1ab; --line: #26282e;
+    --input-bg: #0a0a0b; --chip: #1b1d21; --shadow: none;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif; line-height: 1.7; }
+  .ja { display: none; }
+  [data-lang="ja"] .ja { display: inline; }
+  [data-lang="ja"] .en { display: none; }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 28px 20px 56px; }
+  @media (max-width: 640px) { .wrap { padding: 20px 16px 44px; } }
+  header.top { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .brand { font-weight: 800; color: var(--accent); letter-spacing: .04em; margin: 0; }
+  .brand small { color: var(--muted); font-weight: 700; }
+  .controls { display: flex; gap: 8px; flex-shrink: 0; }
+  #themeToggle, #langToggle { font: inherit; font-weight: 700; font-size: 14px; cursor: pointer; border: 1px solid var(--line); background: var(--card); color: var(--text); border-radius: 999px; padding: 8px 16px; min-height: 44px; }
+  h1 { font-size: 40px; margin: 10px 0 4px; line-height: 1.25; }
+  .status-badge { display: inline-block; background: var(--chip); color: var(--text); border: 1px solid var(--line); border-radius: 999px; padding: 3px 14px; font-size: 13.5px; font-weight: 800; vertical-align: middle; margin-left: 10px; }
+  .lead { color: var(--muted); font-size: 17px; max-width: 46em; margin: 6px 0 0; }
+  section { margin-top: 40px; }
+  .cards { display: grid; grid-template-columns: 1fr; gap: 14px; }
+  @media (min-width: 1024px) { .cards { grid-template-columns: 1fr 1fr; } }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 20px; box-shadow: var(--shadow); }
+  .card h2 { margin: 0 0 8px; font-size: 18px; }
+  .card p { margin: 0; color: var(--muted); font-size: 15px; }
+  a { color: var(--accent); font-weight: 700; }
+  .dashlink { display: inline-block; margin-top: 8px; background: var(--accent); color: #ffffff; text-decoration: none; border-radius: 12px; padding: 10px 16px; font-size: 15px; font-weight: 700; }
+  footer { margin-top: 52px; border-top: 1px solid var(--line); padding-top: 18px; color: var(--muted); font-size: 14px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div>
+      <p class="brand">Guppy's Guide <small>— Don't Panic</small></p>
+      <h1>QL1Swap<span class="status-badge"><span class="en">Planned</span><span class="ja">構築予定</span></span></h1>
+      <p class="lead"><span class="en">A swap site for QL1, planned as part of Guppy's Guide — a hitchhiker's toolbox for 42 Chain &amp; QL1, developed by the community. This page is the project's placeholder: the plan is announced here, and anything that gets decided will be added to this page.</span><span class="ja">QL1 のためのスワップサイトです。Guppy's Guide（42 Chain・QL1 のための道具箱、コミュニティによる開発）の一員として、構築を予定しています。このページは予告ページです。決まったことは、ここに追加していきます。</span></p>
+    </div>
+    <div class="controls">
+      <button id="langToggle" type="button">日本語</button>
+      <button id="themeToggle" type="button">🌙 Dark</button>
+    </div>
+  </header>
+
+  <section>
+    <div class="cards">
+      <div class="card">
+        <h2><span class="en">Status</span><span class="ja">現在の状態</span></h2>
+        <p><span class="en">QL1Swap is still at the planning stage. There is nothing to use on this page yet — no swap function and no wallet connection. No launch date has been set, and the features, supported tokens and other details have not been decided. Anything not written on this page is still undecided.</span><span class="ja">QL1Swap はまだ計画の段階です。このページで使えるものは、まだ何もありません（スワップ機能も、ウォレット接続もありません）。開始時期は未定で、機能・対応トークンなどの詳細も決まっていません。このページに書いていないことは、まだ決まっていないことです。</span></p>
+      </div>
+      <div class="card">
+        <h2><span class="en">About this project</span><span class="ja">このプロジェクトについて</span></h2>
+        <p><span class="en">Guppy's Guide is a community project: its tools are built by the community, and QL1Swap will be as well. This is not an official QL1 service. News about QL1Swap will be posted on this page and on the Guppy's Guide dashboard.</span><span class="ja">Guppy's Guide はコミュニティのプロジェクトで、ツールはコミュニティによって開発されます。QL1Swap もその一つです。QL1 の公式サービスではありません。QL1Swap のお知らせは、このページと Guppy's Guide ダッシュボードに掲載します。</span></p>
+        <a class="dashlink" href="https://ql1-infinite42-guppy-histoire.github.io/guppys-guide-dashboard/"><span class="en">Back to the dashboard</span><span class="ja">ダッシュボードへ</span></a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>Guppy's Guide — <span class="en">a hitchhiker's toolbox for 42 Chain &amp; QL1</span><span class="ja">42 Chain・QL1 のための道具箱</span></span>
+    <span><a href="https://ql1-infinite42-guppy-histoire.github.io/guppys-guide-dashboard/"><span class="en">Dashboard</span><span class="ja">ダッシュボード</span></a> ／ <a href="https://github.com/QL1-Infinite42-Guppy-Histoire/ql1swap" target="_blank" rel="noopener">GitHub</a> ／ <span class="en">As of Nov 12, 2026</span><span class="ja">2026年11月12日時点</span></span>
+  </footer>
+</div>
+<script>
+  var btn = document.getElementById("themeToggle");
+  var langBtn = document.getElementById("langToggle");
+  function isJa() { return document.documentElement.dataset.lang === "ja"; }
+  function themeLabel() {
+    var dark = document.documentElement.dataset.theme === "dark";
+    btn.textContent = isJa() ? (dark ? "☀️ 白背景" : "🌙 黒背景") : (dark ? "☀️ Light" : "🌙 Dark");
+  }
+  function applyLang() {
+    var ja = isJa();
+    document.documentElement.lang = ja ? "ja" : "en";
+    document.title = ja ? "QL1Swap — 構築予定 | Guppy's Guide" : "QL1Swap — Planned | Guppy's Guide";
+    langBtn.textContent = ja ? "English" : "日本語";
+    themeLabel();
+  }
+  btn.addEventListener("click", function () {
+    var dark = document.documentElement.dataset.theme === "dark";
+    if (dark) { delete document.documentElement.dataset.theme; try { localStorage.setItem("guppy-theme", "light"); } catch (e) {} }
+    else { document.documentElement.dataset.theme = "dark"; try { localStorage.setItem("guppy-theme", "dark"); } catch (e) {} }
+    themeLabel();
+  });
+  langBtn.addEventListener("click", function () {
+    if (isJa()) { delete document.documentElement.dataset.lang; try { localStorage.setItem("ql1swap-lang", "en"); } catch (e) {} }
+    else { document.documentElement.dataset.lang = "ja"; try { localStorage.setItem("ql1swap-lang", "ja"); } catch (e) {} }
+    applyLang();
+  });
+  applyLang();
+</script>
+</body>
+</html>
