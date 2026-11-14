@@ -292,8 +292,15 @@ function fmtAmount(v, decimals, maxDp) {
 
 /* ---------- read RPC (public) with batch + fallback ---------- */
 var rpcId = 1;
+function fetchT(url, opts, ms) {
+  var ctl = new AbortController();
+  var timer = setTimeout(function () { ctl.abort(); }, ms || 15000);
+  var o = {}; for (var k in opts) o[k] = opts[k];
+  o.signal = ctl.signal;
+  return fetch(url, o).finally(function () { clearTimeout(timer); });
+}
 async function rpcCall(method, params) {
-  var res = await fetch(RPC_URL, { method: "POST", headers: { "Content-Type": "application/json" },
+  var res = await fetchT(RPC_URL, { method: "POST", headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ jsonrpc: "2.0", id: rpcId++, method: method, params: params }) });
   var j = await res.json();
   if (j.error) throw new Error(j.error.message || "rpc error");
@@ -303,7 +310,7 @@ function ethCall(to, data) { return rpcCall("eth_call", [{ to: to, data: data },
 async function ethCallBatch(calls) {
   var payload = calls.map(function (c, i) { return { jsonrpc: "2.0", id: i + 1, method: "eth_call", params: [{ to: c.to, data: c.data }, "latest"] }; });
   try {
-    var res = await fetch(RPC_URL, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+    var res = await fetchT(RPC_URL, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
     var j = await res.json();
     if (!Array.isArray(j)) throw new Error("no batch");
     var out = new Array(calls.length).fill(null);
@@ -448,12 +455,29 @@ async function bestQuote(amountIn, fromTok, toTok) {
 /* ---------- balances & allowance ---------- */
 async function refreshBalances() {
   if (!S.account) return;
-  S.nativeBal = BigInt(await rpcCall("eth_getBalance", [S.account, "latest"]));
+  var paint = function () { if (typeof S.onBalances === "function") S.onBalances(); };
+  /* 1) native first — paints immediately */
+  try { S.nativeBal = BigInt(await rpcCall("eth_getBalance", [S.account, "latest"])); S.balances["native"] = S.nativeBal; } catch (e) {}
+  paint();
   var erc = S.tokens.filter(function (t) { return !t.isNative; });
-  var calls = erc.map(function (t) { return { to: t.address, data: SEL.balanceOf + encAddr(S.account) }; });
-  var res = await ethCallChunked(calls, 60);
-  erc.forEach(function (t, i) { S.balances[t.address] = res[i] ? decUint(res[i].slice(2), 0) : null; });
-  S.balances["native"] = S.nativeBal;
+  var readSet = async function (list) {
+    var calls = list.map(function (t) { return { to: t.address, data: SEL.balanceOf + encAddr(S.account) }; });
+    var res = await ethCallChunked(calls, 25);
+    list.forEach(function (t, i) { S.balances[t.address] = res[i] ? decUint(res[i].slice(2), 0) : null; });
+    paint();
+  };
+  /* 2) the two selected tokens next, as single reads */
+  var prio = erc.filter(function (t) { return (S.from && t.address === S.from.address) || (S.to && t.address === S.to.address); });
+  for (var i = 0; i < prio.length; i++) {
+    try { var h = await ethCall(prio[i].address, SEL.balanceOf + encAddr(S.account)); S.balances[prio[i].address] = h ? decUint(h.slice(2), 0) : null; } catch (e) { S.balances[prio[i].address] = null; }
+  }
+  paint();
+  /* 3) the rest in small chunks, painting as they land */
+  var rest = erc.filter(function (t) { return prio.indexOf(t) < 0; });
+  await readSet(rest);
+  /* 4) one retry pass for anything that still failed */
+  var failed = erc.filter(function (t) { return S.balances[t.address] == null; });
+  if (failed.length) { await new Promise(function (r) { setTimeout(r, 800); }); await readSet(failed); }
 }
 function balOf(t) { if (!t) return null; if (t.isNative) return S.nativeBal; return S.balances[t.address] !== undefined ? S.balances[t.address] : null; }
 async function allowanceOf(tokenAddr) {
@@ -565,6 +589,7 @@ if (typeof document !== "undefined") (function () {
     var gw = $("gasWarn");
     if (S.account && S.nativeBal != null && S.nativeBal < 3000000n * (10n ** 18n)) gw.style.display = "block"; else gw.style.display = "none";
   }
+  S.onBalances = renderSwapHead;
 
   /* amount + chips */
   var quoteTimer = null;

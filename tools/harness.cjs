@@ -8,7 +8,7 @@ const html = fs.readFileSync(__dirname + '/../index.html', 'utf8');
 const scripts = [...html.matchAll(/<script>([\s\S]*?)<\/script>/g)].map((m) => m[1]);
 const logic = scripts.find((s) => s.includes('loadChain'));
 if (!logic) { console.error('logic script not found'); process.exit(1); }
-const sandbox = { console, fetch, TextDecoder, setTimeout, clearTimeout, URL };
+const sandbox = { console, fetch, TextDecoder, setTimeout, clearTimeout, URL, AbortController };
 sandbox.window = sandbox;
 vm.createContext(sandbox);
 vm.runInContext(logic, sandbox);
