@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>QL1Swap — Planned | Guppy's Guide</title>
-<meta name="description" content="QL1Swap is a planned swap site for QL1, part of Guppy's Guide — a community-built hitchhiker's toolbox for 42 Chain & QL1. Currently at the planning stage; this page is the placeholder where decided details will be posted." />
-<meta property="og:title" content="QL1Swap — Planned | Guppy's Guide" />
-<meta property="og:description" content="A swap site for QL1, planned as part of Guppy's Guide. Developed by the community; not an official QL1 service." />
+<title>QL1Swap — Swap on QL1 | Guppy's Guide</title>
+<meta name="description" content="QL1Swap: a simple swap site for QL1 (QomSwap). Live quotes read straight from the chain, exact-amount approvals, EN/JP. Part of Guppy's Guide — developed by the community, not an official QL1 service." />
+<meta property="og:title" content="QL1Swap — Swap on QL1 | Guppy's Guide" />
+<meta property="og:description" content="Swap tokens on QL1 via QomSwap. Quotes are live on-chain reads; nothing is estimated or invented." />
 <script>
   try {
     if (localStorage.getItem("guppy-theme") === "dark") document.documentElement.dataset.theme = "dark";
@@ -16,36 +16,76 @@
 <style>
   :root {
     --bg: #f7f8fa; --card: #ffffff; --text: #14181f; --muted: #5c6572; --line: #e3e6ec;
-    --input-bg: #ffffff; --chip: #eef1f5; --accent: #2563eb; --shadow: 0 1px 3px rgba(16,24,40,.06);
+    --input-bg: #ffffff; --chip: #eef1f5; --accent: #2563eb; --accent-ink: #2563eb;
+    --green: #1d9e62; --red: #d64545; --shadow: 0 1px 3px rgba(16,24,40,.06);
   }
   :root[data-theme="dark"] {
     --bg: #000000; --card: #121316; --text: #f2f3f5; --muted: #9aa1ab; --line: #26282e;
     --input-bg: #0a0a0b; --chip: #1b1d21; --shadow: none;
   }
   * { box-sizing: border-box; }
-  body { margin: 0; background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif; line-height: 1.7; }
+  body { margin: 0; background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif; line-height: 1.65; }
   .ja { display: none; }
   [data-lang="ja"] .ja { display: inline; }
   [data-lang="ja"] .en { display: none; }
   .wrap { max-width: 1120px; margin: 0 auto; padding: 28px 20px 56px; }
   @media (max-width: 640px) { .wrap { padding: 20px 16px 44px; } }
   header.top { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
-  .brand { font-weight: 800; color: var(--accent); letter-spacing: .04em; margin: 0; }
+  .brand { font-weight: 800; color: var(--accent-ink); letter-spacing: .04em; margin: 0; }
   .brand small { color: var(--muted); font-weight: 700; }
   .controls { display: flex; gap: 8px; flex-shrink: 0; }
-  #themeToggle, #langToggle { font: inherit; font-weight: 700; font-size: 14px; cursor: pointer; border: 1px solid var(--line); background: var(--card); color: var(--text); border-radius: 999px; padding: 8px 16px; min-height: 44px; }
-  h1 { font-size: 40px; margin: 10px 0 4px; line-height: 1.25; }
-  .status-badge { display: inline-block; background: var(--chip); color: var(--text); border: 1px solid var(--line); border-radius: 999px; padding: 3px 14px; font-size: 13.5px; font-weight: 800; vertical-align: middle; margin-left: 10px; }
-  .lead { color: var(--muted); font-size: 17px; max-width: 46em; margin: 6px 0 0; }
-  section { margin-top: 40px; }
-  .cards { display: grid; grid-template-columns: 1fr; gap: 14px; }
-  @media (min-width: 1024px) { .cards { grid-template-columns: 1fr 1fr; } }
+  .pill { font: inherit; font-weight: 700; font-size: 14px; cursor: pointer; border: 1px solid var(--line); background: var(--card); color: var(--text); border-radius: 999px; padding: 8px 16px; min-height: 44px; }
+  h1 { font-size: 38px; margin: 10px 0 4px; line-height: 1.25; }
+  .status-badge { display: inline-block; background: var(--green); color: #ffffff; border-radius: 999px; padding: 3px 14px; font-size: 13.5px; font-weight: 800; vertical-align: middle; margin-left: 10px; }
+  .lead { color: var(--muted); font-size: 16px; max-width: 46em; margin: 6px 0 0; }
+  .grid { display: grid; grid-template-columns: 1fr; gap: 14px; margin-top: 28px; align-items: start; }
+  @media (min-width: 1024px) { .grid { grid-template-columns: 5fr 4fr; } }
   .card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 20px; box-shadow: var(--shadow); }
-  .card h2 { margin: 0 0 8px; font-size: 18px; }
-  .card p { margin: 0; color: var(--muted); font-size: 15px; }
-  a { color: var(--accent); font-weight: 700; }
-  .dashlink { display: inline-block; margin-top: 8px; background: var(--accent); color: #ffffff; text-decoration: none; border-radius: 12px; padding: 10px 16px; font-size: 15px; font-weight: 700; }
-  footer { margin-top: 52px; border-top: 1px solid var(--line); padding-top: 18px; color: var(--muted); font-size: 14px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+  .card h2 { margin: 0 0 10px; font-size: 18px; }
+  .card p { margin: 0 0 8px; color: var(--muted); font-size: 14.5px; }
+  .card p:last-child { margin-bottom: 0; }
+  a { color: var(--accent-ink); font-weight: 700; }
+  .walletline { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .addr { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13.5px; background: var(--chip); border-radius: 8px; padding: 3px 9px; }
+  .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--red); display: inline-block; }
+  .dot.on { background: var(--green); }
+  button.primary { background: var(--accent); color: #fff; border: none; border-radius: 12px; padding: 12px 18px; font-size: 16px; font-weight: 700; cursor: pointer; min-height: 48px; }
+  button.primary:disabled { opacity: .45; cursor: not-allowed; }
+  button.wide { width: 100%; margin-top: 12px; }
+  .field { background: var(--input-bg); border: 1px solid var(--line); border-radius: 12px; padding: 12px; margin-bottom: 10px; }
+  .field .row { display: flex; gap: 10px; align-items: center; }
+  .field label { font-size: 13px; color: var(--muted); font-weight: 700; display: block; margin-bottom: 6px; }
+  .amt { flex: 1; min-width: 0; font: inherit; font-size: 20px; font-weight: 700; border: none; background: transparent; color: var(--text); outline: none; }
+  .amt::placeholder { color: var(--muted); }
+  .tokbtn { display: flex; align-items: center; gap: 6px; font: inherit; font-weight: 800; font-size: 15px; cursor: pointer; border: 1px solid var(--line); background: var(--chip); color: var(--text); border-radius: 999px; padding: 8px 14px; white-space: nowrap; }
+  .bal { font-size: 13px; color: var(--muted); margin-top: 6px; display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+  .chips { display: flex; gap: 6px; }
+  .chipbtn { font: inherit; font-size: 12.5px; font-weight: 700; cursor: pointer; border: 1px solid var(--line); background: var(--card); color: var(--muted); border-radius: 999px; padding: 2px 10px; }
+  .chipbtn:hover { color: var(--text); }
+  .flip { display: flex; justify-content: center; margin: -2px 0 8px; }
+  .flip button { width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--line); background: var(--card); color: var(--text); font-size: 17px; cursor: pointer; }
+  .quote { font-size: 14px; color: var(--muted); display: grid; gap: 4px; margin-top: 4px; }
+  .quote b { color: var(--text); }
+  .slip { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; margin-top: 10px; }
+  .slip .chipbtn.sel { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .slip input { width: 74px; font: inherit; font-size: 14px; border: 1px solid var(--line); border-radius: 8px; padding: 4px 8px; background: var(--input-bg); color: var(--text); }
+  .status { margin-top: 12px; font-size: 14.5px; min-height: 1.4em; }
+  .status.err { color: var(--red); }
+  .status.ok { color: var(--green); }
+  .warn { background: var(--chip); border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px; font-size: 14px; color: var(--text); margin-top: 12px; display: none; }
+  footer { margin-top: 40px; border-top: 1px solid var(--line); padding-top: 18px; color: var(--muted); font-size: 14px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+  .modal { position: fixed; inset: 0; background: rgba(0,0,0,.45); display: none; align-items: flex-start; justify-content: center; padding: 24px 14px; z-index: 50; }
+  .modal.open { display: flex; }
+  .sheet { background: var(--card); color: var(--text); border-radius: 16px; width: 100%; max-width: 480px; max-height: 82vh; display: flex; flex-direction: column; padding: 18px; }
+  .sheet h3 { margin: 0 0 10px; font-size: 17px; }
+  .sheet input.search { font: inherit; font-size: 16px; border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; background: var(--input-bg); color: var(--text); margin-bottom: 10px; }
+  .toklist { overflow-y: auto; display: grid; gap: 2px; }
+  .tokrow { display: flex; justify-content: space-between; gap: 10px; align-items: center; width: 100%; text-align: left; font: inherit; background: transparent; border: none; border-radius: 10px; padding: 9px 10px; cursor: pointer; color: var(--text); }
+  .tokrow:hover { background: var(--chip); }
+  .tokrow .sym { font-weight: 800; font-size: 15px; }
+  .tokrow .sub { font-size: 12.5px; color: var(--muted); }
+  .tokrow .r { text-align: right; font-size: 13px; color: var(--muted); }
+  .x { align-self: flex-end; }
 </style>
 </head>
 <body>
@@ -53,52 +93,406 @@
   <header class="top">
     <div>
       <p class="brand">Guppy's Guide <small>— Don't Panic</small></p>
-      <h1>QL1Swap<span class="status-badge"><span class="en">Planned</span><span class="ja">構築予定</span></span></h1>
-      <p class="lead"><span class="en">A swap site for QL1, planned as part of Guppy's Guide — a hitchhiker's toolbox for 42 Chain &amp; QL1, developed by the community. This page is the project's placeholder: the plan is announced here, and anything that gets decided will be added to this page.</span><span class="ja">QL1 のためのスワップサイトです。Guppy's Guide（42 Chain・QL1 のための道具箱、コミュニティによる開発）の一員として、構築を予定しています。このページは予告ページです。決まったことは、ここに追加していきます。</span></p>
+      <h1>QL1Swap<span class="status-badge"><span class="en">Live</span><span class="ja">公開中</span></span></h1>
+      <p class="lead"><span class="en">Swap tokens on QL1 through QomSwap. The token list is rebuilt from the chain's pools on every load, and every quote is a live read from the router — no estimated or invented prices.</span><span class="ja">QL1 のトークンを QomSwap で交換するサイトです。トークン一覧は開くたびにチェーンのプールから作り直し、見積もりはすべてルーターへのライブ読みです。推定や創作の価格は出しません。</span></p>
     </div>
     <div class="controls">
-      <button id="langToggle" type="button">日本語</button>
-      <button id="themeToggle" type="button">🌙 Dark</button>
+      <button class="pill" id="langToggle" type="button">日本語</button>
+      <button class="pill" id="themeToggle" type="button">🌙 Dark</button>
     </div>
   </header>
 
-  <section>
-    <div class="cards">
-      <div class="card">
-        <h2><span class="en">Status</span><span class="ja">現在の状態</span></h2>
-        <p><span class="en">QL1Swap is still at the planning stage. There is nothing to use on this page yet — no swap function and no wallet connection. No launch date has been set, and the features, supported tokens and other details have not been decided. Anything not written on this page is still undecided.</span><span class="ja">QL1Swap はまだ計画の段階です。このページで使えるものは、まだ何もありません（スワップ機能も、ウォレット接続もありません）。開始時期は未定で、機能・対応トークンなどの詳細も決まっていません。このページに書いていないことは、まだ決まっていないことです。</span></p>
+  <div class="grid">
+    <div class="card">
+      <h2><span class="en">Swap</span><span class="ja">スワップ</span></h2>
+      <div class="walletline" style="margin-bottom:14px">
+        <span class="dot" id="wDot"></span>
+        <span id="wState"><span class="en">Wallet not connected</span><span class="ja">ウォレット未接続</span></span>
+        <span class="addr" id="wAddr" style="display:none"></span>
+        <button class="primary" id="connectBtn" type="button" style="margin-left:auto; padding:9px 16px; min-height:44px"><span class="en">Connect MetaMask</span><span class="ja">MetaMask を接続</span></button>
+      </div>
+
+      <div class="field">
+        <label><span class="en">You pay</span><span class="ja">支払う</span></label>
+        <div class="row">
+          <input class="amt" id="amtIn" inputmode="decimal" placeholder="0.0" autocomplete="off" />
+          <button class="tokbtn" id="tokInBtn" type="button">… ▾</button>
+        </div>
+        <div class="bal"><span><span class="en">Balance:</span><span class="ja">残高：</span> <span id="balIn">—</span></span>
+          <span class="chips">
+            <button class="chipbtn" data-pct="25" type="button">25%</button>
+            <button class="chipbtn" data-pct="50" type="button">50%</button>
+            <button class="chipbtn" data-pct="75" type="button">75%</button>
+            <button class="chipbtn" data-pct="max" type="button">MAX</button>
+          </span>
+        </div>
+      </div>
+
+      <div class="flip"><button id="flipBtn" type="button" title="Flip">⇅</button></div>
+
+      <div class="field">
+        <label><span class="en">You receive (live quote)</span><span class="ja">受け取る（ライブ見積もり）</span></label>
+        <div class="row">
+          <input class="amt" id="amtOut" placeholder="0.0" readonly />
+          <button class="tokbtn" id="tokOutBtn" type="button">… ▾</button>
+        </div>
+        <div class="bal"><span><span class="en">Balance:</span><span class="ja">残高：</span> <span id="balOut">—</span></span></div>
+      </div>
+
+      <div class="quote" id="quoteBox" style="display:none">
+        <span><span class="en">Rate:</span><span class="ja">レート：</span> <b id="qRate">—</b></span>
+        <span><span class="en">Route:</span><span class="ja">ルート：</span> <b id="qRoute">—</b></span>
+        <span><span class="en">Price impact:</span><span class="ja">価格への影響：</span> <b id="qImpact">—</b></span>
+        <span><span class="en">Minimum received:</span><span class="ja">最小受取：</span> <b id="qMin">—</b></span>
+      </div>
+
+      <div class="slip">
+        <span style="font-size:13.5px; color:var(--muted); font-weight:700"><span class="en">Slippage</span><span class="ja">スリッページ</span></span>
+        <button class="chipbtn" data-slip="0.5" type="button">0.5%</button>
+        <button class="chipbtn sel" data-slip="1" type="button">1%</button>
+        <button class="chipbtn" data-slip="3" type="button">3%</button>
+        <input id="slipCustom" inputmode="decimal" placeholder="%" />
+      </div>
+
+      <div class="warn" id="gasWarn"><span class="en">Your QOM balance is low — swaps on QL1 need QOM for gas (about 18 QOM per gas unit, so a swap costs millions of QOM in gas). You can get QOM from the <a href="https://ql1-infinite42-guppy-histoire.github.io/42-faucet/" target="_blank" rel="noopener">faucet</a>.</span><span class="ja">QOM 残高が少なめです。QL1 のスワップにはガス代の QOM が要ります（ガス単価は約18 QOM／ガスで、1回のスワップで数百万 QOM ほどかかります）。QOM は<a href="https://ql1-infinite42-guppy-histoire.github.io/42-faucet/" target="_blank" rel="noopener">フォーセット</a>でもらえます。</span></div>
+
+      <button class="primary wide" id="actionBtn" type="button" disabled>…</button>
+      <div class="status" id="statusBox"></div>
+    </div>
+
+    <div>
+      <div class="card" style="margin-bottom:14px">
+        <h2><span class="en">How it works</span><span class="ja">仕組み</span></h2>
+        <p><span class="en">Swaps run on <b>QomSwap</b> (router <span class="addr">0xc1f9…4f30</span>) on QL1 (chain ID 766) through your MetaMask. Approvals are always for the exact swap amount, never unlimited.</span><span class="ja">スワップは QL1（チェーンID 766）の <b>QomSwap</b>（ルーター <span class="addr">0xc1f9…4f30</span>）で、MetaMask から実行します。承認（approve）は毎回スワップする額ちょうどだけにし、無制限の承認はしません。</span></p>
+        <p><span class="en">Native QOM swaps go through WQOM inside the same transaction. Picking QOM → WQOM wraps, and WQOM → QOM unwraps — no pool involved.</span><span class="ja">ネイティブ QOM の交換は、同じトランザクションの中で WQOM 経由で行われます。QOM → WQOM はラップ、WQOM → QOM はアンラップで、プールは使いません。</span></p>
+        <p><span class="en">Quotes compare the direct pool and routes via WQOM / qUSDT / qUSDC / QSWAP / qCAW, all read live with <i>getAmountsOut</i>, and the best one is used.</span><span class="ja">見積もりは、直接プールと WQOM／qUSDT／qUSDC／QSWAP／qCAW 経由のルートをすべてライブで読み比べ（<i>getAmountsOut</i>）、一番良いものを使います。</span></p>
       </div>
       <div class="card">
-        <h2><span class="en">About this project</span><span class="ja">このプロジェクトについて</span></h2>
-        <p><span class="en">Guppy's Guide is a community project: its tools are built by the community, and QL1Swap will be as well. This is not an official QL1 service. News about QL1Swap will be posted on this page and on the Guppy's Guide dashboard.</span><span class="ja">Guppy's Guide はコミュニティのプロジェクトで、ツールはコミュニティによって開発されます。QL1Swap もその一つです。QL1 の公式サービスではありません。QL1Swap のお知らせは、このページと Guppy's Guide ダッシュボードに掲載します。</span></p>
-        <a class="dashlink" href="https://ql1-infinite42-guppy-histoire.github.io/guppys-guide-dashboard/"><span class="en">Back to the dashboard</span><span class="ja">ダッシュボードへ</span></a>
+        <h2><span class="en">Which tokens are listed</span><span class="ja">載っているトークン</span></h2>
+        <p><span class="en">The list is rebuilt from QomSwap's factory on every load: a token appears when it has a live pool whose QOM side holds at least 10,000,000 QOM, or a qUSDT / qUSDC / qDAI pool. Tokens without a real pool are never listed — for example ZAP has no QomSwap pool on QL1, so it does not appear. If a route quotes zero for your amount, swapping stays disabled.</span><span class="ja">一覧は開くたびに QomSwap のファクトリーから作り直します。プールの QOM 側に 1,000 万 QOM 以上入っているトークン、または qUSDT／qUSDC／qDAI のプールがあるトークンだけを載せます。本物のプールが無いトークンは載せません（例：QL1 の ZAP には QomSwap のプールが無いので、出てきません）。あなたの額で見積もりがゼロになるルートでは、スワップは押せません。</span></p>
+        <p><span class="en">QL1Swap is part of Guppy's Guide, developed by the community. It is not an official QL1 service. This is the first release — please test with a small amount first.</span><span class="ja">QL1Swap は Guppy's Guide の一員で、コミュニティによる開発です。QL1 の公式サービスではありません。公開したばかりの初版なので、最初は少額で試してください。</span></p>
+        <p style="margin-top:10px"><span id="poolInfo"><span class="en">Reading pools from the chain…</span><span class="ja">プールをチェーンから読んでいます…</span></span></p>
       </div>
     </div>
-  </section>
+  </div>
 
   <footer>
     <span>Guppy's Guide — <span class="en">a hitchhiker's toolbox for 42 Chain &amp; QL1</span><span class="ja">42 Chain・QL1 のための道具箱</span></span>
-    <span><a href="https://ql1-infinite42-guppy-histoire.github.io/guppys-guide-dashboard/"><span class="en">Dashboard</span><span class="ja">ダッシュボード</span></a> ／ <a href="https://github.com/QL1-Infinite42-Guppy-Histoire/ql1swap" target="_blank" rel="noopener">GitHub</a> ／ <span class="en">As of Nov 12, 2026</span><span class="ja">2026年11月12日時点</span></span>
+    <span><a href="https://ql1-infinite42-guppy-histoire.github.io/guppys-guide-dashboard/"><span class="en">Dashboard</span><span class="ja">ダッシュボード</span></a> ／ <a href="https://github.com/QL1-Infinite42-Guppy-Histoire/ql1swap" target="_blank" rel="noopener">GitHub</a></span>
   </footer>
 </div>
+
+<div class="modal" id="tokModal">
+  <div class="sheet">
+    <button class="pill x" id="tokClose" type="button">✕</button>
+    <h3><span class="en">Choose a token</span><span class="ja">トークンを選ぶ</span></h3>
+    <input class="search" id="tokSearch" placeholder="Search name or 0x address" />
+    <div class="toklist" id="tokList"></div>
+  </div>
+</div>
+
 <script>
-  var btn = document.getElementById("themeToggle");
-  var langBtn = document.getElementById("langToggle");
+"use strict";
+/* ================= QL1Swap — QomSwap frontend for QL1 (chain 766) =================
+   Hand-rolled JSON-RPC + ABI (house style, no external dependencies).
+   Reads: public RPC. Writes: MetaMask only. Quotes: router.getAmountsOut, live. */
+var RPC_URL = "https://evm-rpc-ql1.mschihuahua.org";
+var CHAIN_ID = 766, CHAIN_HEX = "0x2fe";
+var ROUTER = "0xc1f90231035A52091eBCb7dddaCa3051a5F44f30";
+var FACTORY = "0x475f361993D6FAcBF32fB82B66be0fB40f3d974C";
+var WQOM = "0xa26dfbf98dd1a32fae56a3d2b2d60a8a41b0bdf0";
+var EXPLORER = "https://scan.qom.network";
+var MIN_WQOM_SIDE = 10000000n * (10n ** 18n); /* listing bar: 10,000,000 QOM on the QOM side of a pool */
+var STABLES = ["0xc276b91c0e8d10260af7b67009d2683bb7776308", "0xb0a125e9673dc8e12bbcd0769c1257cf4a836d54", "0x8cb00ee173ae1c35d66118b7e08a69a0d4da06f2"];
+var HUBS = [WQOM.toLowerCase(), STABLES[0], STABLES[1], "0x4af41f453ead00d1cc6aa0b5b454bdeb102afc8d", "0xd2140e16adf37194036865e90bbca1139b739d0d"];
+
+/* Verified registry (addresses cross-checked against the DEX aggregator's QL1 table,
+   which was itself verified on-chain). Decimals/symbols are still re-read live at load;
+   these are display fallbacks and the pin order for the picker. */
+var REGISTRY = [
+  { id: "native", symbol: "QOM", name: "QOM (native)", address: WQOM, decimals: 18, isNative: true },
+  { id: "wqom", symbol: "WQOM", name: "Wrapped QOM", address: WQOM, decimals: 18, isNative: false },
+  { id: "qusdt", symbol: "qUSDT", name: "USDT from Ethereum", address: "0xc276b91c0e8d10260af7b67009d2683bb7776308", decimals: 6, isNative: false },
+  { id: "qusdc", symbol: "qUSDC", name: "USDC from Ethereum", address: "0xb0a125e9673dc8e12bbcd0769c1257cf4a836d54", decimals: 6, isNative: false },
+  { id: "qdai", symbol: "qDAI", name: "DAI from Ethereum", address: "0x8cb00ee173ae1c35d66118b7e08a69a0d4da06f2", decimals: 18, isNative: false },
+  { id: "qswap", symbol: "QSWAP", name: "QOMSWAP", address: "0x4AF41F453Ead00d1cc6Aa0b5B454bdeB102AFc8d", decimals: 18, isNative: false },
+  { id: "qcaw", symbol: "qCAW", name: "CAW from Ethereum", address: "0xd2140E16aDf37194036865E90BbCA1139b739d0D", decimals: 18, isNative: false },
+  { id: "o", symbol: "O", name: "Childhoods End", address: "0x6c39b68a28ba90f4eb80032ec0eb32ad81cbbed4", decimals: 18, isNative: false },
+  { id: "baby", symbol: "BABY", name: "A Fund Baby", address: "0x4667fc0a4b996e0f997313a49de48036b584ef22", decimals: 18, isNative: false },
+  { id: "ket", symbol: "KET", name: "Ryoshi Afterparty", address: "0x034c1fe794ab9d30e27e1ce0d89a4591fc9f1fb4", decimals: 18, isNative: false },
+  { id: "hawk", symbol: "HAWK", name: "HAWK", address: "0xbc85f14059d60458b614052b4a84734e463878cc", decimals: 18, isNative: false },
+  { id: "father", symbol: "FATHER", name: "Robert A. Heinlein", address: "0x2860ec7c34b29f3d2b43788c9a5f0de051f799bb", decimals: 18, isNative: false },
+  { id: "qosak", symbol: "qOSAK", name: "OSAK from Ethereum", address: "0x5b6af20880a583128170d8c1fc319889ff405a5a", decimals: 18, isNative: false }
+];
+var SEL = {
+  allPairsLength: "0x574f2ba3", allPairs: "0x1e3dd18b",
+  token0: "0x0dfe1681", token1: "0xd21220a7", getReserves: "0x0902f1ac",
+  symbol: "0x95d89b41", decimals: "0x313ce567", balanceOf: "0x70a08231",
+  allowance: "0xdd62ed3e", approve: "0x095ea7b3",
+  getAmountsOut: "0xd06ca61f",
+  swapTokensForTokens: "0x38ed1739", swapETHForTokens: "0x7ff36ab5", swapTokensForETH: "0x18cbafe5",
+  deposit: "0xd0e30db0", withdraw: "0x2e1a7d4d"
+};
+
+/* ---------- tiny ABI helpers ---------- */
+function lc(a) { return String(a).toLowerCase(); }
+function encUint(v) { return BigInt(v).toString(16).padStart(64, "0"); }
+function encAddr(a) { return "000000000000000000000000" + lc(a).slice(2); }
+function decUint(hex, off) { return BigInt("0x" + hex.slice(off, off + 64)); }
+function decAddr(hex, off) { return "0x" + hex.slice(off + 24, off + 64); }
+function decString(hex) {
+  try {
+    if (!hex || hex === "0x") return "";
+    var body = hex.slice(2);
+    if (body.length === 64) { /* bytes32-style symbol */
+      var s = "";
+      for (var i = 0; i < 64; i += 2) { var c = parseInt(body.slice(i, i + 2), 16); if (c === 0) break; s += String.fromCharCode(c); }
+      return s;
+    }
+    var off = Number(decUint(body, 0)) * 2;
+    var len = Number(decUint(body, off));
+    var bytes = [];
+    for (var j = 0; j < len; j++) bytes.push(parseInt(body.slice(off + 64 + j * 2, off + 66 + j * 2), 16));
+    return new TextDecoder("utf-8").decode(new Uint8Array(bytes));
+  } catch (e) { return ""; }
+}
+function parseAmount(str, decimals) {
+  if (str == null) return null;
+  str = String(str).trim().replace(/,/g, "");
+  if (!str || !/^\d*(\.\d*)?$/.test(str)) return null;
+  var parts = str.split("."), ip = parts[0] || "0", fp = (parts[1] || "");
+  if (fp.length > decimals) return null;
+  fp = fp.padEnd(decimals, "0");
+  try { return BigInt(ip) * (10n ** BigInt(decimals)) + (fp ? BigInt(fp) : 0n); } catch (e) { return null; }
+}
+function fmtAmount(v, decimals, maxDp) {
+  if (v == null) return "—";
+  var neg = v < 0n; if (neg) v = -v;
+  var base = 10n ** BigInt(decimals);
+  var ip = v / base, fp = v % base;
+  var fs = fp.toString().padStart(decimals, "0");
+  if (maxDp != null) fs = fs.slice(0, maxDp);
+  fs = fs.replace(/0+$/, "");
+  var out = ip.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + (fs ? "." + fs : "");
+  return (neg ? "-" : "") + out;
+}
+
+/* ---------- read RPC (public) with batch + fallback ---------- */
+var rpcId = 1;
+async function rpcCall(method, params) {
+  var res = await fetch(RPC_URL, { method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ jsonrpc: "2.0", id: rpcId++, method: method, params: params }) });
+  var j = await res.json();
+  if (j.error) throw new Error(j.error.message || "rpc error");
+  return j.result;
+}
+function ethCall(to, data) { return rpcCall("eth_call", [{ to: to, data: data }, "latest"]); }
+async function ethCallBatch(calls) {
+  var payload = calls.map(function (c, i) { return { jsonrpc: "2.0", id: i + 1, method: "eth_call", params: [{ to: c.to, data: c.data }, "latest"] }; });
+  try {
+    var res = await fetch(RPC_URL, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+    var j = await res.json();
+    if (!Array.isArray(j)) throw new Error("no batch");
+    var out = new Array(calls.length).fill(null);
+    j.forEach(function (r) { out[r.id - 1] = r.error ? null : r.result; });
+    return out;
+  } catch (e) {
+    var out2 = [];
+    for (var i = 0; i < calls.length; i++) { try { out2.push(await ethCall(calls[i].to, calls[i].data)); } catch (e2) { out2.push(null); } }
+    return out2;
+  }
+}
+async function ethCallChunked(calls, size) {
+  var out = [];
+  for (var i = 0; i < calls.length; i += size) out = out.concat(await ethCallBatch(calls.slice(i, i + size)));
+  return out;
+}
+
+/* ---------- chain state ---------- */
+var S = {
+  tokens: [],          /* listed tokens: {id,symbol,name,address,decimals,isNative,depth} */
+  tokByAddr: {},        /* lc address -> token (ERC20 view; native shares WQOM entry key + '#native') */
+  pairs: [],            /* liquid pairs {pair,t0,t1,r0,r1} lc addresses, BigInt reserves */
+  adj: {},              /* lc addr -> [{to, pair}] for hops with both reserves > 0 */
+  pairMap: {},          /* "a|b" -> pair record */
+  account: null, balances: {}, nativeBal: null, gasPrice: null,
+  from: null, to: null, quote: null, slip: 1, busy: false, ready: false
+};
+function pairKey(a, b) { return a < b ? a + "|" + b : b + "|" + a; }
+
+async function loadChain() {
+  var n = Number(await ethCall(FACTORY, SEL.allPairsLength).then(function (h) { return decUint(h.slice(2), 0); }));
+  var calls = [];
+  for (var i = 0; i < n; i++) calls.push({ to: FACTORY, data: SEL.allPairs + encUint(i) });
+  var pairAddrs = (await ethCallChunked(calls, 60)).map(function (h) { return h ? lc(decAddr(h.slice(2), 0)) : null; });
+  calls = [];
+  pairAddrs.forEach(function (pa) { if (pa) { calls.push({ to: pa, data: SEL.token0 }, { to: pa, data: SEL.token1 }, { to: pa, data: SEL.getReserves }); } });
+  var res = await ethCallChunked(calls, 60);
+  var pairs = [], k = 0;
+  pairAddrs.forEach(function (pa) {
+    if (!pa) { return; }
+    var h0 = res[k++], h1 = res[k++], hr = res[k++];
+    if (!h0 || !h1 || !hr) return;
+    var b = hr.slice(2);
+    var rec = { pair: pa, t0: lc(decAddr(h0.slice(2), 0)), t1: lc(decAddr(h1.slice(2), 0)), r0: decUint(b, 0), r1: decUint(b, 64) };
+    if (rec.r0 > 0n && rec.r1 > 0n) pairs.push(rec);
+  });
+  S.pairs = pairs;
+  pairs.forEach(function (p) {
+    S.pairMap[pairKey(p.t0, p.t1)] = p;
+    (S.adj[p.t0] = S.adj[p.t0] || []).push({ to: p.t1, pair: p });
+    (S.adj[p.t1] = S.adj[p.t1] || []).push({ to: p.t0, pair: p });
+  });
+  /* token universe from liquid pairs */
+  var depth = {}; /* best WQOM-side reserve per token (raw WQOM wei) */
+  var stableLinked = {};
+  pairs.forEach(function (p) {
+    [p.t0, p.t1].forEach(function (t, idx) {
+      var other = idx === 0 ? p.t1 : p.t0, rSelf = idx === 0 ? p.r0 : p.r1, rOther = idx === 0 ? p.r1 : p.r0;
+      if (other === lc(WQOM)) { var v = rOther; if (!depth[t] || v > depth[t]) depth[t] = v; }
+      var sIdx = STABLES.indexOf(other);
+      if (sIdx >= 0 && rOther >= (sIdx === 2 ? 10n * (10n ** 18n) : 10000000n)) stableLinked[t] = true; /* >= 10 units of the stable */
+      if (t === lc(WQOM)) { var v2 = rSelf; /* WQOM itself: depth = its deepest side against stables/hubs */ }
+    });
+  });
+  var uni = {};
+  pairs.forEach(function (p) { uni[p.t0] = true; uni[p.t1] = true; });
+  var addrs = Object.keys(uni).filter(function (a) {
+    return REGISTRY.some(function (r) { return lc(r.address) === a; }) || (depth[a] && depth[a] >= MIN_WQOM_SIDE) || stableLinked[a];
+  });
+  /* metadata: live symbol/decimals */
+  calls = [];
+  addrs.forEach(function (a) { calls.push({ to: a, data: SEL.symbol }, { to: a, data: SEL.decimals }); });
+  var mres = await ethCallChunked(calls, 60);
+  var regByAddr = {};
+  REGISTRY.forEach(function (r) { regByAddr[lc(r.address)] = r; });
+  var toks = [];
+  addrs.forEach(function (a, i) {
+    var sym = decString(mres[i * 2] || ""), dec = mres[i * 2 + 1] ? Number(decUint(mres[i * 2 + 1].slice(2), 0)) : NaN;
+    var reg = regByAddr[a];
+    if (!sym) sym = reg ? reg.symbol : "";
+    if (!isFinite(dec)) dec = reg ? reg.decimals : 18;
+    if (!sym) return; /* unreadable symbol: skip rather than guess */
+    toks.push({ id: "t" + a, symbol: sym, name: reg && reg.address !== WQOM ? reg.name : sym, address: a, decimals: dec, isNative: false, depth: depth[a] || 0n, reg: reg && a !== lc(WQOM) ? REGISTRY.indexOf(reg) : (a === lc(WQOM) ? 1 : 999) });
+  });
+  /* native + WQOM pinned first, then registry order, then depth */
+  var native = { id: "native", symbol: "QOM", name: "QOM (native)", address: lc(WQOM), decimals: 18, isNative: true, depth: 0n, reg: 0 };
+  toks.sort(function (x, y) { if (x.reg !== y.reg) return x.reg - y.reg; return y.depth > x.depth ? 1 : -1; });
+  S.tokens = [native].concat(toks);
+  S.tokens.forEach(function (t) { S.tokByAddr[t.address + (t.isNative ? "#n" : "")] = t; });
+  S.from = S.tokens.find(function (t) { return t.id === "qusdt"; }) || S.tokens[2] || S.tokens[0];
+  S.to = native;
+  S.gasPrice = BigInt(await rpcCall("eth_gasPrice", []));
+  return { pairCount: n, liquid: pairs.length, tokenCount: S.tokens.length };
+}
+
+/* ---------- quoting ---------- */
+function hopRate(pair, fromAddr) { /* spot rate out-per-in along one hop, as a float for impact display only */
+  var is0 = pair.t0 === fromAddr;
+  var ri = is0 ? pair.r0 : pair.r1, ro = is0 ? pair.r1 : pair.r0;
+  var dI = (S.tokByAddr[fromAddr] || { decimals: 18 }).decimals;
+  var toAddr = is0 ? pair.t1 : pair.t0;
+  var dO = (S.tokByAddr[toAddr] || { decimals: 18 }).decimals;
+  return (Number(ro) / Math.pow(10, dO)) / (Number(ri) / Math.pow(10, dI));
+}
+function candidatePaths(a, b) {
+  var out = [], seen = {};
+  function push(p) { var k = p.join(">"); if (!seen[k] && p.every(function (x, i) { return i === 0 || S.pairMap[pairKey(p[i - 1], x)]; })) { seen[k] = 1; out.push(p); } }
+  push([a, b]);
+  HUBS.forEach(function (h) { if (h !== a && h !== b) push([a, h, b]); });
+  HUBS.forEach(function (h1) { HUBS.forEach(function (h2) { if (h1 !== a && h1 !== b && h2 !== a && h2 !== b && h1 !== h2) push([a, h1, h2, b]); }); });
+  return out;
+}
+async function quoteRouter(amountIn, path) {
+  var data = SEL.getAmountsOut + encUint(amountIn) + encUint(64) + encUint(path.length) + path.map(encAddr).join("");
+  var h = await ethCall(ROUTER, data);
+  if (!h || h === "0x") return null;
+  var b = h.slice(2), off = Number(decUint(b, 0)) * 2, len = Number(decUint(b, off));
+  if (!len) return null;
+  return decUint(b, off + 64 + (len - 1) * 64);
+}
+async function bestQuote(amountIn, fromTok, toTok) {
+  var a = fromTok.address, b = toTok.address;
+  if (fromTok.isNative && toTok.address === lc(WQOM) && !toTok.isNative) return { wrap: "wrap", out: amountIn, path: [a], impact: 0 };
+  if (toTok.isNative && fromTok.address === lc(WQOM) && !fromTok.isNative) return { wrap: "unwrap", out: amountIn, path: [a], impact: 0 };
+  var paths = candidatePaths(a, b);
+  var best = null;
+  for (var i = 0; i < paths.length; i++) {
+    var out = null;
+    try { out = await quoteRouter(amountIn, paths[i]); } catch (e) { out = null; }
+    if (out && out > 0n && (!best || out > best.out)) best = { out: out, path: paths[i] };
+  }
+  if (!best) return null;
+  /* impact vs spot (display only) */
+  var spot = 1, ok = true;
+  for (var j = 0; j + 1 < best.path.length; j++) { var pr = S.pairMap[pairKey(best.path[j], best.path[j + 1])]; if (!pr) { ok = false; break; } spot *= hopRate(pr, best.path[j]); }
+  var eff = (Number(best.out) / Math.pow(10, toTok.decimals)) / (Number(amountIn) / Math.pow(10, fromTok.decimals));
+  best.impact = ok && spot > 0 ? Math.max(0, (1 - eff / spot) * 100) : null;
+  best.rate = eff;
+  return best;
+}
+
+/* ---------- balances & allowance ---------- */
+async function refreshBalances() {
+  if (!S.account) return;
+  S.nativeBal = BigInt(await rpcCall("eth_getBalance", [S.account, "latest"]));
+  var erc = S.tokens.filter(function (t) { return !t.isNative; });
+  var calls = erc.map(function (t) { return { to: t.address, data: SEL.balanceOf + encAddr(S.account) }; });
+  var res = await ethCallChunked(calls, 60);
+  erc.forEach(function (t, i) { S.balances[t.address] = res[i] ? decUint(res[i].slice(2), 0) : null; });
+  S.balances["native"] = S.nativeBal;
+}
+function balOf(t) { if (!t) return null; if (t.isNative) return S.nativeBal; return S.balances[t.address] !== undefined ? S.balances[t.address] : null; }
+async function allowanceOf(tokenAddr) {
+  var h = await ethCall(tokenAddr, SEL.allowance + encAddr(S.account) + encAddr(ROUTER));
+  return h ? decUint(h.slice(2), 0) : 0n;
+}
+
+/* ---------- MetaMask ---------- */
+function mm() { return (typeof window !== "undefined" && window.ethereum) ? window.ethereum : null; }
+async function ensureChain() {
+  var e = mm(); if (!e) throw new Error("nometamask");
+  var cid = await e.request({ method: "eth_chainId" });
+  if (cid !== CHAIN_HEX) {
+    try { await e.request({ method: "wallet_switchEthereumChain", params: [{ chainId: CHAIN_HEX }] }); }
+    catch (err) {
+      if (err && err.code === 4902) {
+        await e.request({ method: "wallet_addEthereumChain", params: [{ chainId: CHAIN_HEX, chainName: "QL1", nativeCurrency: { name: "QOM", symbol: "QOM", decimals: 18 }, rpcUrls: [RPC_URL], blockExplorerUrls: [EXPLORER] }] });
+      } else throw err;
+    }
+  }
+}
+async function sendTx(tx) {
+  var e = mm();
+  var hash = await e.request({ method: "eth_sendTransaction", params: [tx] });
+  var tries = 0;
+  while (tries < 90) {
+    await new Promise(function (r) { setTimeout(r, 2000); });
+    var rc = await rpcCall("eth_getTransactionReceipt", [hash]).catch(function () { return null; });
+    if (rc) { if (rc.status === "0x1") return hash; throw new Error("reverted"); }
+    tries++;
+  }
+  throw new Error("timeout");
+}
+</script>
+
+<script>
+/* ================= UI wiring ================= */
+if (typeof document !== "undefined") (function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var langBtn = $("langToggle"), themeBtn = $("themeToggle");
   function isJa() { return document.documentElement.dataset.lang === "ja"; }
-  function themeLabel() {
-    var dark = document.documentElement.dataset.theme === "dark";
-    btn.textContent = isJa() ? (dark ? "☀️ 白背景" : "🌙 黒背景") : (dark ? "☀️ Light" : "🌙 Dark");
-  }
+  function T(en, ja) { return isJa() ? ja : en; }
+  function themeLabel() { var d = document.documentElement.dataset.theme === "dark"; themeBtn.textContent = isJa() ? (d ? "☀️ 白背景" : "🌙 黒背景") : (d ? "☀️ Light" : "🌙 Dark"); }
   function applyLang() {
-    var ja = isJa();
-    document.documentElement.lang = ja ? "ja" : "en";
-    document.title = ja ? "QL1Swap — 構築予定 | Guppy's Guide" : "QL1Swap — Planned | Guppy's Guide";
-    langBtn.textContent = ja ? "English" : "日本語";
-    themeLabel();
+    document.documentElement.lang = isJa() ? "ja" : "en";
+    document.title = isJa() ? "QL1Swap — QL1 のスワップ | Guppy's Guide" : "QL1Swap — Swap on QL1 | Guppy's Guide";
+    langBtn.textContent = isJa() ? "English" : "日本語";
+    themeLabel(); renderSwapHead(); updateAction();
   }
-  btn.addEventListener("click", function () {
-    var dark = document.documentElement.dataset.theme === "dark";
-    if (dark) { delete document.documentElement.dataset.theme; try { localStorage.setItem("guppy-theme", "light"); } catch (e) {} }
+  themeBtn.addEventListener("click", function () {
+    var d = document.documentElement.dataset.theme === "dark";
+    if (d) { delete document.documentElement.dataset.theme; try { localStorage.setItem("guppy-theme", "light"); } catch (e) {} }
     else { document.documentElement.dataset.theme = "dark"; try { localStorage.setItem("guppy-theme", "dark"); } catch (e) {} }
     themeLabel();
   });
@@ -107,7 +501,217 @@
     else { document.documentElement.dataset.lang = "ja"; try { localStorage.setItem("ql1swap-lang", "ja"); } catch (e) {} }
     applyLang();
   });
+
+  var statusBox = $("statusBox");
+  function setStatus(msg, kind) { statusBox.textContent = msg || ""; statusBox.className = "status" + (kind ? " " + kind : ""); }
+  function short(a) { return a ? a.slice(0, 6) + "…" + a.slice(-4) : ""; }
+
+  /* token picker */
+  var pickTarget = "from";
+  function openPicker(which) {
+    pickTarget = which;
+    $("tokSearch").value = "";
+    renderTokList("");
+    $("tokModal").classList.add("open");
+    setTimeout(function () { $("tokSearch").focus(); }, 30);
+  }
+  function renderTokList(filter) {
+    var f = (filter || "").toLowerCase(), box = $("tokList"); box.innerHTML = "";
+    S.tokens.filter(function (t) { return !f || t.symbol.toLowerCase().indexOf(f) >= 0 || t.address.indexOf(f) >= 0 || (t.name || "").toLowerCase().indexOf(f) >= 0; })
+      .slice(0, 120).forEach(function (t) {
+        var b = document.createElement("button"); b.className = "tokrow"; b.type = "button";
+        var bal = balOf(t);
+        b.innerHTML = "<span><span class='sym'></span><br><span class='sub'></span></span><span class='r'></span>";
+        b.querySelector(".sym").textContent = t.symbol + (t.isNative ? " (native)" : "");
+        b.querySelector(".sub").textContent = (t.name || "") + " · " + short(t.address);
+        b.querySelector(".r").textContent = bal != null ? fmtAmount(bal, t.decimals, 6) : "";
+        b.addEventListener("click", function () {
+          if (pickTarget === "from") { if (S.to && S.to.address === t.address && S.to.isNative === t.isNative) S.to = S.from; S.from = t; }
+          else { if (S.from && S.from.address === t.address && S.from.isNative === t.isNative) S.from = S.to; S.to = t; }
+          $("tokModal").classList.remove("open");
+          renderSwapHead(); scheduleQuote();
+        });
+        box.appendChild(b);
+      });
+    if (!box.children.length) box.innerHTML = "<p style='color:var(--muted); padding:8px'>" + T("No tokens match.", "見つかりません。") + "</p>";
+  }
+  $("tokSearch").addEventListener("input", function () { renderTokList($("tokSearch").value); });
+  $("tokClose").addEventListener("click", function () { $("tokModal").classList.remove("open"); });
+  $("tokModal").addEventListener("click", function (e) { if (e.target === $("tokModal")) $("tokModal").classList.remove("open"); });
+  $("tokInBtn").addEventListener("click", function () { openPicker("from"); });
+  $("tokOutBtn").addEventListener("click", function () { openPicker("to"); });
+  $("flipBtn").addEventListener("click", function () { var t = S.from; S.from = S.to; S.to = t; renderSwapHead(); scheduleQuote(); });
+
+  function renderSwapHead() {
+    if (!S.from || !S.to) return;
+    $("tokInBtn").textContent = S.from.symbol + " ▾";
+    $("tokOutBtn").textContent = S.to.symbol + " ▾";
+    var bi = balOf(S.from), bo = balOf(S.to);
+    $("balIn").textContent = bi != null ? fmtAmount(bi, S.from.decimals, 6) + " " + S.from.symbol : "—";
+    $("balOut").textContent = bo != null ? fmtAmount(bo, S.to.decimals, 6) + " " + S.to.symbol : "—";
+    var gw = $("gasWarn");
+    if (S.account && S.nativeBal != null && S.nativeBal < 3000000n * (10n ** 18n)) gw.style.display = "block"; else gw.style.display = "none";
+  }
+
+  /* amount + chips */
+  var quoteTimer = null;
+  function scheduleQuote() { if (quoteTimer) clearTimeout(quoteTimer); quoteTimer = setTimeout(runQuote, 350); }
+  $("amtIn").addEventListener("input", scheduleQuote);
+  document.querySelectorAll("[data-pct]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var bal = balOf(S.from); if (bal == null || !S.from) return;
+      var v;
+      if (b.dataset.pct === "max") {
+        v = bal;
+        if (S.from.isNative) { var reserve = (S.gasPrice || 18000000000000000000n) * 600000n; v = bal > reserve ? bal - reserve : 0n; }
+      } else v = bal * BigInt(b.dataset.pct) / 100n;
+      $("amtIn").value = fmtAmount(v, S.from.decimals, 18).replace(/,/g, "");
+      scheduleQuote();
+    });
+  });
+  document.querySelectorAll("[data-slip]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      document.querySelectorAll("[data-slip]").forEach(function (x) { x.classList.remove("sel"); });
+      b.classList.add("sel"); $("slipCustom").value = ""; S.slip = parseFloat(b.dataset.slip); runQuote();
+    });
+  });
+  $("slipCustom").addEventListener("input", function () {
+    var v = parseFloat($("slipCustom").value);
+    if (isFinite(v) && v >= 0 && v <= 50) { document.querySelectorAll("[data-slip]").forEach(function (x) { x.classList.remove("sel"); }); S.slip = v; scheduleQuote(); }
+  });
+
+  async function runQuote() {
+    S.quote = null;
+    var raw = $("amtIn").value;
+    var amt = S.from ? parseAmount(raw, S.from.decimals) : null;
+    $("quoteBox").style.display = "none";
+    if (!S.ready || !amt || amt <= 0n || !S.from || !S.to) { $("amtOut").value = ""; updateAction(); return; }
+    var q = null;
+    try { q = await bestQuote(amt, S.from, S.to); } catch (e) { q = null; }
+    if ($("amtIn").value !== raw) return; /* stale */
+    S.quote = q; S.quoteAmt = amt;
+    if (!q) { $("amtOut").value = ""; setStatus(T("No route with a live quote for this amount.", "この額でライブ見積もりが取れるルートがありません。"), "err"); updateAction(); return; }
+    setStatus("");
+    $("amtOut").value = fmtAmount(q.out, S.to.decimals, 10);
+    $("quoteBox").style.display = "grid";
+    if (q.wrap) {
+      $("qRate").textContent = "1 : 1";
+      $("qRoute").textContent = q.wrap === "wrap" ? T("Wrap (no pool)", "ラップ（プールなし）") : T("Unwrap (no pool)", "アンラップ（プールなし）");
+      $("qImpact").textContent = "0%";
+      $("qMin").textContent = fmtAmount(q.out, S.to.decimals, 10) + " " + S.to.symbol;
+    } else {
+      $("qRate").textContent = "1 " + S.from.symbol + " ≈ " + (q.rate >= 1 ? q.rate.toPrecision(6) : q.rate.toExponential(3)) + " " + S.to.symbol;
+      $("qRoute").textContent = q.path.map(function (a) { var t = S.tokens.find(function (x) { return x.address === a && !x.isNative; }); var nt = S.tokens.find(function (x) { return x.address === a; }); return (t || nt || {}).symbol || short(a); }).join(" → ");
+      $("qImpact").textContent = q.impact != null ? "≈ " + q.impact.toFixed(2) + "%" : "—";
+      var minOut = q.out * BigInt(Math.round((100 - S.slip) * 100)) / 10000n;
+      S.quote.minOut = minOut;
+      $("qMin").textContent = fmtAmount(minOut, S.to.decimals, 10) + " " + S.to.symbol + " (" + S.slip + "%)";
+    }
+    if (q.wrap) S.quote.minOut = q.out;
+    updateAction();
+  }
+
+  /* action button: connect / approve / swap */
+  var btn = $("actionBtn");
+  function updateAction() {
+    if (!S.ready) { btn.disabled = true; btn.textContent = T("Loading pools…", "プールを読み込み中…"); return; }
+    if (!S.account) { btn.disabled = false; btn.textContent = T("Connect MetaMask", "MetaMask を接続"); return; }
+    if (S.busy) { btn.disabled = true; return; }
+    var amt = S.from ? parseAmount($("amtIn").value, S.from.decimals) : null;
+    if (!amt || amt <= 0n) { btn.disabled = true; btn.textContent = T("Enter an amount", "額を入れてください"); return; }
+    if (!S.quote) { btn.disabled = true; btn.textContent = T("No route", "ルートなし"); return; }
+    var bal = balOf(S.from);
+    if (bal != null && amt > bal) { btn.disabled = true; btn.textContent = T("Insufficient balance", "残高が足りません"); return; }
+    if (S.quote.wrap) { btn.disabled = false; btn.textContent = S.quote.wrap === "wrap" ? T("Wrap QOM → WQOM", "ラップする QOM → WQOM") : T("Unwrap WQOM → QOM", "アンラップする WQOM → QOM"); return; }
+    if (!S.from.isNative && S.allow != null && S.allow < amt) { btn.disabled = false; btn.textContent = T("Approve ", "承認する ") + S.from.symbol; return; }
+    btn.disabled = false; btn.textContent = T("Swap", "スワップ");
+  }
+  setInterval(async function () { /* keep allowance fresh for button label */
+    if (S.account && S.from && !S.from.isNative && !S.busy) {
+      try { S.allow = await allowanceOf(S.from.address); } catch (e) { S.allow = null; }
+      updateAction();
+    }
+  }, 6000);
+
+  btn.addEventListener("click", async function () {
+    if (!S.account) { connect(); return; }
+    if (S.busy || !S.quote) return;
+    var amt = parseAmount($("amtIn").value, S.from.decimals);
+    if (!amt) return;
+    S.busy = true; btn.disabled = true;
+    try {
+      await ensureChain();
+      if (S.quote.wrap === "wrap") {
+        btn.textContent = T("Wrapping…", "ラップ中…");
+        var h1 = await sendTx({ from: S.account, to: WQOM, data: SEL.deposit, value: "0x" + amt.toString(16) });
+        setStatus(T("Wrapped. ", "ラップしました。") + "tx: " + h1, "ok");
+      } else if (S.quote.wrap === "unwrap") {
+        btn.textContent = T("Unwrapping…", "アンラップ中…");
+        var h2 = await sendTx({ from: S.account, to: WQOM, data: SEL.withdraw + encUint(amt) });
+        setStatus(T("Unwrapped. ", "アンラップしました。") + "tx: " + h2, "ok");
+      } else if (!S.from.isNative && (S.allow == null || S.allow < amt)) {
+        btn.textContent = T("Approving…", "承認中…");
+        await sendTx({ from: S.account, to: S.from.address, data: SEL.approve + encAddr(ROUTER) + encUint(amt) });
+        S.allow = amt;
+        setStatus(T("Approved. Now press Swap.", "承認しました。次に「スワップ」を押してください。"), "ok");
+      } else {
+        btn.textContent = T("Swapping…", "スワップ中…");
+        var q = await bestQuote(amt, S.from, S.to); /* fresh quote at send time */
+        if (!q || q.wrap) throw new Error("route changed");
+        var minOut = q.out * BigInt(Math.round((100 - S.slip) * 100)) / 10000n;
+        var deadline = BigInt(Math.floor(Date.now() / 1000) + 1200);
+        var data, value = "0x0";
+        if (S.from.isNative) { data = SEL.swapETHForTokens + encUint(minOut) + encUint(128) + encAddr(S.account) + encUint(deadline) + encUint(q.path.length) + q.path.map(encAddr).join(""); value = "0x" + amt.toString(16); }
+        else if (S.to.isNative) { data = SEL.swapTokensForETH + encUint(amt) + encUint(minOut) + encUint(160) + encAddr(S.account) + encUint(deadline) + encUint(q.path.length) + q.path.map(encAddr).join(""); }
+        else { data = SEL.swapTokensForTokens + encUint(amt) + encUint(minOut) + encUint(160) + encAddr(S.account) + encUint(deadline) + encUint(q.path.length) + q.path.map(encAddr).join(""); }
+        var h3 = await sendTx({ from: S.account, to: ROUTER, data: data, value: value });
+        setStatus(T("Swap sent: ", "スワップ送信済み：") + EXPLORER + "/tx/" + h3, "ok");
+        $("amtIn").value = "";
+      }
+    } catch (e) {
+      var m = (e && e.message) || String(e);
+      if (m.indexOf("rejected") >= 0 || (e && e.code === 4001)) setStatus(T("Cancelled in the wallet.", "ウォレットでキャンセルされました。"), "err");
+      else if (m === "reverted") setStatus(T("The transaction reverted. The price may have moved beyond your slippage — try again, or widen the slippage.", "トランザクションが失敗しました。価格がスリッページの範囲を超えて動いた可能性があります。再試行するか、スリッページを広げてください。"), "err");
+      else setStatus(T("Error: ", "エラー：") + m.slice(0, 140), "err");
+    }
+    S.busy = false;
+    try { await refreshBalances(); } catch (e) {}
+    renderSwapHead(); S.quote = null; $("amtOut").value = ""; $("quoteBox").style.display = "none";
+    updateAction();
+  });
+
+  async function connect() {
+    if (!mm()) { setStatus(T("MetaMask was not found in this browser.", "このブラウザに MetaMask が見つかりません。"), "err"); return; }
+    try {
+      var accts = await mm().request({ method: "eth_requestAccounts" });
+      S.account = lc(accts[0]);
+      await ensureChain();
+      $("wDot").classList.add("on");
+      $("wState").textContent = T("Connected (QL1)", "接続中（QL1）");
+      $("wAddr").style.display = ""; $("wAddr").textContent = short(S.account);
+      $("connectBtn").style.display = "none";
+      await refreshBalances(); renderSwapHead(); updateAction(); runQuote();
+    } catch (e) { setStatus(T("Connection failed.", "接続に失敗しました。"), "err"); }
+  }
+  $("connectBtn").addEventListener("click", connect);
+  if (mm() && mm().on) {
+    mm().on("accountsChanged", function () { location.reload(); });
+    mm().on("chainChanged", function () { location.reload(); });
+  }
+
+  /* boot */
   applyLang();
+  loadChain().then(function (info) {
+    S.ready = true;
+    $("poolInfo").textContent = T(
+      "Pools read live: " + info.pairCount + " pairs (" + info.liquid + " with liquidity), " + info.tokenCount + " tokens listed.",
+      "ライブ読み完了：ペア " + info.pairCount + " 件（流動性あり " + info.liquid + " 件）、掲載トークン " + info.tokenCount + " 件。");
+    renderSwapHead(); updateAction();
+  }).catch(function (e) {
+    $("poolInfo").textContent = T("Could not read the chain. Please reload.", "チェーンを読めませんでした。再読み込みしてください。");
+    setStatus(T("Failed to load pools from the QL1 RPC.", "QL1 の RPC からプールを読めませんでした。"), "err");
+  });
+})();
 </script>
 </body>
 </html>
