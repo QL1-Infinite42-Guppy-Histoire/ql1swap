@@ -57,10 +57,10 @@
   .field label { font-size: 13px; color: var(--muted); font-weight: 700; display: block; margin-bottom: 6px; }
   .amt { flex: 1; min-width: 0; font: inherit; font-size: 20px; font-weight: 700; border: none; background: transparent; color: var(--text); outline: none; }
   .amt::placeholder { color: var(--muted); }
-  .tokbtn { display: flex; align-items: center; gap: 6px; font: inherit; font-weight: 800; font-size: 15px; cursor: pointer; border: 1px solid var(--line); background: var(--chip); color: var(--text); border-radius: 999px; padding: 8px 14px; white-space: nowrap; }
+  .tokbtn { display: flex; align-items: center; gap: 6px; font: inherit; font-weight: 800; font-size: 15px; cursor: pointer; border: 1px solid var(--line); background: var(--chip); color: var(--text); border-radius: 999px; padding: 8px 14px; white-space: nowrap; max-width: 48%; overflow: hidden; text-overflow: ellipsis; flex-shrink: 0; min-height: 44px; }
   .bal { font-size: 13px; color: var(--muted); margin-top: 6px; display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
   .chips { display: flex; gap: 6px; }
-  .chipbtn { font: inherit; font-size: 12.5px; font-weight: 700; cursor: pointer; border: 1px solid var(--line); background: var(--card); color: var(--muted); border-radius: 999px; padding: 2px 10px; }
+  .chipbtn { font: inherit; font-size: 12.5px; font-weight: 700; cursor: pointer; border: 1px solid var(--line); background: var(--card); color: var(--muted); border-radius: 999px; padding: 6px 12px; min-height: 36px; }
   .chipbtn:hover { color: var(--text); }
   .flip { display: flex; justify-content: center; margin: -2px 0 8px; }
   .flip button { width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--line); background: var(--card); color: var(--text); font-size: 17px; cursor: pointer; }
@@ -68,8 +68,8 @@
   .quote b { color: var(--text); }
   .slip { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; margin-top: 10px; }
   .slip .chipbtn.sel { background: var(--accent); border-color: var(--accent); color: #fff; }
-  .slip input { width: 74px; font: inherit; font-size: 14px; border: 1px solid var(--line); border-radius: 8px; padding: 4px 8px; background: var(--input-bg); color: var(--text); }
-  .status { margin-top: 12px; font-size: 14.5px; min-height: 1.4em; }
+  .slip input { width: 74px; font: inherit; font-size: 16px; border: 1px solid var(--line); border-radius: 8px; padding: 6px 8px; background: var(--input-bg); color: var(--text); min-height: 36px; }
+  .status { margin-top: 12px; font-size: 14.5px; min-height: 1.4em; overflow-wrap: anywhere; }
   .status.err { color: var(--red); }
   .status.ok { color: var(--green); }
   .warn { background: var(--chip); border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px; font-size: 14px; color: var(--text); margin-top: 12px; display: none; }
@@ -80,12 +80,25 @@
   .sheet h3 { margin: 0 0 10px; font-size: 17px; }
   .sheet input.search { font: inherit; font-size: 16px; border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; background: var(--input-bg); color: var(--text); margin-bottom: 10px; }
   .toklist { overflow-y: auto; display: grid; gap: 2px; }
-  .tokrow { display: flex; justify-content: space-between; gap: 10px; align-items: center; width: 100%; text-align: left; font: inherit; background: transparent; border: none; border-radius: 10px; padding: 9px 10px; cursor: pointer; color: var(--text); }
+  .tokrow { display: flex; justify-content: space-between; gap: 10px; align-items: center; width: 100%; text-align: left; font: inherit; background: transparent; border: none; border-radius: 10px; padding: 11px 10px; min-height: 52px; cursor: pointer; color: var(--text); }
   .tokrow:hover { background: var(--chip); }
   .tokrow .sym { font-weight: 800; font-size: 15px; }
   .tokrow .sub { font-size: 12.5px; color: var(--muted); }
   .tokrow .r { text-align: right; font-size: 13px; color: var(--muted); }
   .x { align-self: flex-end; }
+  @media (max-width: 640px) {
+    h1 { font-size: 29px; }
+    .lead { font-size: 15px; }
+    .card { padding: 16px; }
+    .grid { margin-top: 20px; gap: 12px; }
+    .field { padding: 10px; }
+    .amt { font-size: 19px; }
+    .tokbtn { font-size: 14px; padding: 8px 11px; }
+    .modal { padding: 10px 8px calc(10px + env(safe-area-inset-bottom)); align-items: flex-end; }
+    .sheet { max-height: 88vh; max-height: 88dvh; border-radius: 16px; padding: 14px; }
+    .walletline .primary { margin-left: 0; }
+    footer { font-size: 13px; }
+  }
 </style>
 </head>
 <body>
