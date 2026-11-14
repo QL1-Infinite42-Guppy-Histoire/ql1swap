@@ -456,30 +456,38 @@ async function bestQuote(amountIn, fromTok, toTok) {
 async function refreshBalances() {
   if (!S.account) return;
   var paint = function () { if (typeof S.onBalances === "function") S.onBalances(); };
-  /* 1) native first — paints immediately */
+  /* native first — paints immediately */
   try { S.nativeBal = BigInt(await rpcCall("eth_getBalance", [S.account, "latest"])); S.balances["native"] = S.nativeBal; } catch (e) {}
   paint();
+  /* ERC-20 balances: SINGLE reads only (no batching — batch requests proved flaky
+     in some in-app browsers), a few in parallel, most important tokens first. */
   var erc = S.tokens.filter(function (t) { return !t.isNative; });
-  var readSet = async function (list) {
-    var calls = list.map(function (t) { return { to: t.address, data: SEL.balanceOf + encAddr(S.account) }; });
-    var res = await ethCallChunked(calls, 25);
-    list.forEach(function (t, i) { S.balances[t.address] = res[i] ? decUint(res[i].slice(2), 0) : null; });
+  var rank = function (t) {
+    if (S.from && t.address === S.from.address) return 0;
+    if (S.to && t.address === S.to.address) return 1;
+    if (t.reg != null && t.reg < 900) return 10 + t.reg;
+    return 1000;
+  };
+  var queue = erc.slice().sort(function (a, b) { return rank(a) - rank(b); });
+  var one = async function (t) {
+    try { var h = await ethCall(t.address, SEL.balanceOf + encAddr(S.account)); S.balances[t.address] = h ? decUint(h.slice(2), 0) : null; }
+    catch (e) { S.balances[t.address] = null; }
     paint();
   };
-  /* 2) the two selected tokens next, as single reads */
-  var prio = erc.filter(function (t) { return (S.from && t.address === S.from.address) || (S.to && t.address === S.to.address); });
-  for (var i = 0; i < prio.length; i++) {
-    try { var h = await ethCall(prio[i].address, SEL.balanceOf + encAddr(S.account)); S.balances[prio[i].address] = h ? decUint(h.slice(2), 0) : null; } catch (e) { S.balances[prio[i].address] = null; }
-  }
-  paint();
-  /* 3) the rest in small chunks, painting as they land */
-  var rest = erc.filter(function (t) { return prio.indexOf(t) < 0; });
-  await readSet(rest);
-  /* 4) one retry pass for anything that still failed */
+  var workers = [];
+  for (var w = 0; w < 5; w++) workers.push((async function () { while (queue.length) await one(queue.shift()); })());
+  await Promise.all(workers);
+  /* one retry pass for anything that still failed */
   var failed = erc.filter(function (t) { return S.balances[t.address] == null; });
-  if (failed.length) { await new Promise(function (r) { setTimeout(r, 800); }); await readSet(failed); }
+  for (var i = 0; i < failed.length; i++) await one(failed[i]);
 }
 function balOf(t) { if (!t) return null; if (t.isNative) return S.nativeBal; return S.balances[t.address] !== undefined ? S.balances[t.address] : null; }
+async function ensureBalance(t) {
+  if (!S.account || !t || t.isNative || S.balances[t.address] != null) return;
+  try { var h = await ethCall(t.address, SEL.balanceOf + encAddr(S.account)); S.balances[t.address] = h ? decUint(h.slice(2), 0) : null; }
+  catch (e) { S.balances[t.address] = null; }
+  if (typeof S.onBalances === "function") S.onBalances();
+}
 async function allowanceOf(tokenAddr) {
   var h = await ethCall(tokenAddr, SEL.allowance + encAddr(S.account) + encAddr(ROUTER));
   return h ? decUint(h.slice(2), 0) : 0n;
@@ -566,7 +574,7 @@ if (typeof document !== "undefined") (function () {
           if (pickTarget === "from") { if (S.to && S.to.address === t.address && S.to.isNative === t.isNative) S.to = S.from; S.from = t; }
           else { if (S.from && S.from.address === t.address && S.from.isNative === t.isNative) S.from = S.to; S.to = t; }
           $("tokModal").classList.remove("open");
-          renderSwapHead(); scheduleQuote();
+          renderSwapHead(); scheduleQuote(); ensureBalance(S.from); ensureBalance(S.to);
         });
         box.appendChild(b);
       });
